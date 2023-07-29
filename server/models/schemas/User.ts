@@ -18,6 +18,7 @@ import {
   NonAttribute,
   Sequelize
 } from 'sequelize'
+import { v4 as uuidv4 } from 'uuid';
 import type { Order } from './Order'
 import type { Product } from './Product'
 import type { Review } from './Review'
@@ -28,7 +29,7 @@ export class User extends Model<
   InferAttributes<User, {omit: UserAssociations}>,
   InferCreationAttributes<User, {omit: UserAssociations}>
 > {
-  declare id: CreationOptional<number>
+  declare id: CreationOptional<string>
   declare firstName: string | null
   declare lastName: string | null
   declare email: string | null
@@ -86,9 +87,8 @@ export class User extends Model<
   static initModel(sequelize: Sequelize): typeof User {
     User.init({
       id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.STRING,
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false
       },
       firstName: {
@@ -115,9 +115,15 @@ export class User extends Model<
       updatedAt: {
         type: DataTypes.DATE
       }
-    }, {
-      sequelize
-    })
+    },       {
+      hooks: {
+        beforeValidate: async (user) => {
+          user.id = uuidv4()
+        }
+      },
+      sequelize,
+    }
+    )
     
     return User
   }
