@@ -6,22 +6,23 @@ import {
   Model,
   Sequelize
 } from 'sequelize'
+import { v4 as uuidv4 } from 'uuid';
 
 export class Review extends Model<
   InferAttributes<Review>,
   InferCreationAttributes<Review>
 > {
-  declare id: CreationOptional<number>
+  declare id: CreationOptional<string>
   declare rating: number | null
   declare review: string | null
-  declare date: string | null
+  declare date: Date | null
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
   
   static initModel(sequelize: Sequelize): typeof Review {
     Review.init({
       id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.STRING,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
@@ -33,7 +34,7 @@ export class Review extends Model<
         type: DataTypes.STRING
       },
       date: {
-        type: DataTypes.DATEONLY
+        type: DataTypes.DATE
       },
       createdAt: {
         type: DataTypes.DATE
@@ -41,9 +42,15 @@ export class Review extends Model<
       updatedAt: {
         type: DataTypes.DATE
       }
-    }, {
-      sequelize
-    })
+    },{
+      hooks: {
+        beforeValidate: async (review) => {
+          review.id = uuidv4()
+        }
+      },
+      sequelize,
+    }
+    )
     
     return Review
   }

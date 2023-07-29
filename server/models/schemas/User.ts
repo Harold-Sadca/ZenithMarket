@@ -115,7 +115,7 @@ export class User extends Model<
       updatedAt: {
         type: DataTypes.DATE
       }
-    },       {
+    },{
       hooks: {
         beforeValidate: async (user) => {
           user.id = uuidv4()

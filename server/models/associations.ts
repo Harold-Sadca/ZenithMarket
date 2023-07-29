@@ -46,6 +46,18 @@ export function initModels(sequelize: Sequelize) {
     as: 'reviews',
     foreignKey: 'products_id'
   })
+  Product.belongsTo(User, {
+    as: 'user',
+    foreignKey: 'user_id'
+  })
+  Order.belongsTo(Product, {
+    as: 'product',
+    foreignKey: 'products_id'
+  })
+  Order.belongsTo(User, {
+    as: 'user',
+    foreignKey: 'user_id'
+  })
 
   return {
     User,

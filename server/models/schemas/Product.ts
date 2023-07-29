@@ -21,18 +21,20 @@ import {
   NonAttribute,
   Sequelize
 } from 'sequelize'
+import { v4 as uuidv4 } from 'uuid';
 import type { Category } from './Category'
 import type { Review } from './Review'
+import type { User } from './User'
 
-type ProductAssociations = 'category' | 'reviews'
+type ProductAssociations = 'category' | 'reviews' | 'user'
 
 export class Product extends Model<
   InferAttributes<Product, {omit: ProductAssociations}>,
   InferCreationAttributes<Product, {omit: ProductAssociations}>
 > {
-  declare id: CreationOptional<number>
+  declare id: CreationOptional<string>
   declare name: string | null
-  declare price: string | null
+  declare price: number | null
   declare description: string | null
   declare image: string | null
   declare quantityInStock: number | null
@@ -57,6 +59,12 @@ export class Product extends Model<
   declare hasReview: HasManyHasAssociationMixin<Review, number>
   declare hasReviews: HasManyHasAssociationsMixin<Review, number>
   declare countReviews: HasManyCountAssociationsMixin
+
+  // Product belongsTo User
+  declare user?: NonAttribute<User>
+  declare getUser: BelongsToGetAssociationMixin<User>
+  declare setUser: BelongsToSetAssociationMixin<User, string>
+  declare createUser: BelongsToCreateAssociationMixin<User>
   
   declare static associations: {
     category: Association<Product, Category>,
@@ -66,16 +74,15 @@ export class Product extends Model<
   static initModel(sequelize: Sequelize): typeof Product {
     Product.init({
       id: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.STRING,
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false
       },
       name: {
         type: DataTypes.STRING
       },
       price: {
-        type: DataTypes.STRING
+        type: DataTypes.NUMBER
       },
       description: {
         type: DataTypes.STRING
@@ -92,9 +99,15 @@ export class Product extends Model<
       updatedAt: {
         type: DataTypes.DATE
       }
-    }, {
-      sequelize
-    })
+    },{
+      hooks: {
+        beforeValidate: async (product) => {
+          product.id = uuidv4()
+        }
+      },
+      sequelize,
+    }
+    )
     
     return Product
   }

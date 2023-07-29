@@ -9,3 +9,31 @@ export interface TypeUser {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface TypeProduct {
+  id?:string;
+  name:string;
+  price: number;
+  description:string;
+  image:string;
+  quantityInStock:number;
+  createdAt?:Date;
+  updatedAt?:Date;
+}
+
+export interface TypeReview {
+  id?:string;
+  rating:number;
+  review:string;
+  date:Date;
+  createdAt?:Date;
+  updatedAt?:Date;
+}
+
+export interface TypeOrder {
+  id?:string;
+  date:Date;
+  totalAmount:number;
+  createdAt:Date;
+  updatedAt:Date
+}
