@@ -16,7 +16,8 @@ const createUserController = (req, res) => __awaiter(void 0, void 0, void 0, fun
         const { firstName, lastName, email, password, address, contactNumber } = req.body;
         if (firstName && lastName && email && password && address && contactNumber) {
             const user = { firstName, lastName, email, password, address, contactNumber };
-            const newUser = (0, userMethods_1.createUserModel)(user);
+            const newUser = yield (0, userMethods_1.createUserModel)(user);
+            console.log(newUser);
             res.status(201).send(newUser);
         }
         else {

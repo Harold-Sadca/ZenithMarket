@@ -23,11 +23,12 @@ const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const { json } = body_parser_1.default;
 const graphSchema_1 = require("./graphSchema");
+const port = process.env.PORT;
 (() => __awaiter(void 0, void 0, void 0, function* () {
     dotenv_1.default.config();
-    const port = process.env.PORT;
     const app = (0, express_1.default)();
-    app.use(userRoutes_1.default);
+    app.use(express_1.default.json());
+    app.use('/user', userRoutes_1.default);
     const httpServer = http_1.default.createServer(app);
     const server = new server_1.ApolloServer({
         typeDefs: graphSchema_1.typeDefs,
@@ -38,6 +39,6 @@ const graphSchema_1 = require("./graphSchema");
     app.use('/graphql', (0, cors_1.default)(), json(), (0, express4_1.expressMiddleware)(server, {
         context: ({ req }) => __awaiter(void 0, void 0, void 0, function* () { return ({ token: req.headers.token }); }),
     }));
-    yield new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
+    yield new Promise((resolve) => httpServer.listen({ port }, resolve));
     console.log(`🚀 Server ready at http://localhost:4000/graphql`);
 }))();

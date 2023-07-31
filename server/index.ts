@@ -9,13 +9,13 @@ import cors from 'cors';
 import pkg from 'body-parser';
 const { json } = pkg;
 import { typeDefs, resolvers } from './graphSchema'
+const port = process.env.PORT;
 
 (async () => {
   dotenv.config();
-const port = process.env.PORT;
 const app:Express = express();
-
-app.use(userRouter)
+app.use(express.json())
+app.use('/user',userRouter)
 
 interface MyContext {
   token?: String;
@@ -37,6 +37,6 @@ app.use(
   }),
 );
 
-await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve));
+await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
 console.log(`🚀 Server ready at http://localhost:4000/graphql`);
 })()
