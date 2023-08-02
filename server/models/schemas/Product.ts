@@ -82,7 +82,7 @@ export class Product extends Model<
         type: DataTypes.STRING
       },
       price: {
-        type: DataTypes.NUMBER
+        type: DataTypes.INTEGER
       },
       description: {
         type: DataTypes.STRING

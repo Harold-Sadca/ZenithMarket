@@ -7,12 +7,16 @@ const resolvers = {
     user(_:any,args:any) {
       return User.findOne({where:{id:args.id}});
     },
+    allUser() {
+      return User.findAll()
+    }
   },
 };
 
 const typeDefs = `#graphql
   type Query {
     user(id: ID!): User
+    allUser:[User]
   }
   type User {
     id: String

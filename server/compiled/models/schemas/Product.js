@@ -24,7 +24,7 @@ class Product extends sequelize_1.Model {
                 type: sequelize_1.DataTypes.STRING
             },
             price: {
-                type: sequelize_1.DataTypes.NUMBER
+                type: sequelize_1.DataTypes.INTEGER
             },
             description: {
                 type: sequelize_1.DataTypes.STRING

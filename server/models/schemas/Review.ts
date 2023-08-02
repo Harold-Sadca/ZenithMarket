@@ -24,7 +24,6 @@ export class Review extends Model<
       id: {
         type: DataTypes.STRING,
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false
       },
       rating: {

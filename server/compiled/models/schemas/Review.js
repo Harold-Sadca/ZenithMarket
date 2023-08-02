@@ -18,7 +18,6 @@ class Review extends sequelize_1.Model {
             id: {
                 type: sequelize_1.DataTypes.STRING,
                 primaryKey: true,
-                autoIncrement: true,
                 allowNull: false
             },
             rating: {
