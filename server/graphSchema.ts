@@ -4,7 +4,7 @@ const resolvers = {
   Query: {
     // Our resolvers can access the fields in contextValue
     // from their third argument
-    user(_,args) {
+    user(_:any,args:any) {
       return User.findOne({where:{id:args.id}});
     },
   },
