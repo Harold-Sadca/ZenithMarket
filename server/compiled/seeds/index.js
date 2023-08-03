@@ -15,7 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const dotenv_1 = __importDefault(require("dotenv"));
 const userHelper_1 = require("./userHelper");
+const productHelper_1 = require("./productHelper");
 const associations_1 = require("../models/associations");
+const productMethods_1 = require("../models/methods/productMethods");
 dotenv_1.default.config();
 const dbName = 'ZenithMarket';
 const db = new sequelize_1.Sequelize(dbName, `${process.env.MYSQL_USERNAME}`, `${process.env.MYSQL_PASSWORD}`, {
@@ -33,7 +35,23 @@ const seedDB = () => __awaiter(void 0, void 0, void 0, function* () {
             address: userHelper_1.address[i],
             contactNumber: userHelper_1.contactNumber[i]
         };
-        yield User.create(user);
+        const product1 = {
+            name: productHelper_1.name[i],
+            price: productHelper_1.price[i],
+            description: productHelper_1.description[i],
+            image: productHelper_1.image[i],
+            quantityInStock: productHelper_1.quantityInStock[i]
+        };
+        const product2 = {
+            name: productHelper_1.name[40 - i],
+            price: productHelper_1.price[40 - i],
+            description: productHelper_1.description[40 - i],
+            image: productHelper_1.image[40 - i],
+            quantityInStock: productHelper_1.quantityInStock[40 - i]
+        };
+        const newUser = yield User.create(user);
+        yield (0, productMethods_1.createProductModel)(newUser.id, product1);
+        yield (0, productMethods_1.createProductModel)(newUser.id, product2);
     }
 });
 (function authenticate() {

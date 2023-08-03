@@ -13,9 +13,10 @@ exports.createProductModel = void 0;
 const index_1 = require("../index");
 const createProductModel = (userId, product) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const newProduct = new index_1.Product(product);
+        const newProduct = yield index_1.Product.create(product);
         newProduct.setUser(userId);
         yield newProduct.save();
+        console.log(newProduct);
         return newProduct;
     }
     catch (error) {

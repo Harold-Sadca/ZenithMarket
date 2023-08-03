@@ -17,6 +17,7 @@ export interface TypeProduct {
   description:string;
   image:string;
   quantityInStock:number;
+  user_id?:string;
   createdAt?:Date;
   updatedAt?:Date;
 }

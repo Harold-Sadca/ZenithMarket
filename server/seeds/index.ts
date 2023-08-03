@@ -1,7 +1,9 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 import { firstName, lastName, email, password, address, contactNumber } from './userHelper';
+import { name, price, description, image, quantityInStock } from './productHelper';
 import { initModels } from '../models/associations';
+import { createProductModel } from '../models/methods/productMethods';
 dotenv.config();
 
 const dbName = 'ZenithMarket';
@@ -27,7 +29,23 @@ const seedDB = async() => {
       address:address[i],
       contactNumber:contactNumber[i]
     }
-    await User.create(user)
+    const product1 = {
+      name:name[i],
+      price:price[i],
+      description:description[i],
+      image: image[i],
+      quantityInStock: quantityInStock[i]
+    }
+    const product2 = {
+      name:name[40-i],
+      price:price[40-i],
+      description:description[40-i],
+      image: image[40-i],
+      quantityInStock: quantityInStock[40-i]
+    }
+    const newUser = await User.create(user)
+    await createProductModel(newUser.id,product1)
+    await createProductModel(newUser.id,product2)
   }
 }
 
