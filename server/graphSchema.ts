@@ -1,22 +1,43 @@
 import { User, Product } from './models/index'
+import { TypeProduct, TypeUser } from './types/types';
 
 const resolvers = {
   Query: {
     // Our resolvers can access the fields in contextValue
     // from their third argument
-    user(_:any,args:any) {
-      return User.findOne({where:{id:args.id}});
+    async user(_:any,args:any) {
+      const user = await User.findOne({where:{id:args.id}});
+      return user
     },
-    allUser() {
-      return User.findAll()
+    async allUser() {
+      const users = await User.findAll()
+      return users
     },
-    allProducts() {
-      return Product.findAll()
+    async allProducts() {
+      const products = await Product.findAll()
+      return products
     },
-    products(_:any,args:any) {
-      return Product.findAll()
+    async products(_:any,args:any) {
+      const products = await Product.findAll()
+      return products.filter(el => el.user_id == args.id)
+    },
+    async product(_:any, args:any) {
+      const product = await Product.findOne({where:{id:args.id}})
+      return product
     }
   },
+  User: {
+    async products(parent:TypeUser) {
+      const products = await Product.findAll()
+      return products.filter(el => el.user_id == parent.id)
+    }
+  },
+  Product: {
+    async user(parent:TypeProduct) {
+      const user = await User.findOne({where:{id:parent.user_id}});
+      return user
+    }
+  }
 };
 
 const typeDefs = `#graphql
@@ -25,6 +46,7 @@ const typeDefs = `#graphql
     allUser:[User]
     allProducts:[Product]
     products(id: ID!):[Product]
+    product(id: ID!):Product
   }
   type User {
     id: String
@@ -34,7 +56,7 @@ const typeDefs = `#graphql
     password:String
     address:String
     contactNumber:String
-    products(id: ID!):[Product]
+    products:[Product]
   }
   type Product {
     id:String
@@ -44,6 +66,7 @@ const typeDefs = `#graphql
     image:String
     quantityInStock:Int
     user_id:String
+    user:User
   }
 `;
 
