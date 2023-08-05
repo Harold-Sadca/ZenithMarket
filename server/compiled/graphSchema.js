@@ -15,6 +15,7 @@ const resolvers = {
     Query: {
         // Our resolvers can access the fields in contextValue
         // from their third argument
+        // argument are as follows parent, args, context, { cacheControl }
         user(_, args) {
             return __awaiter(this, void 0, void 0, function* () {
                 const user = yield index_1.User.findOne({ where: { id: args.id } });
@@ -61,6 +62,15 @@ const resolvers = {
                 return user;
             });
         }
+    },
+    Mutation: {
+        deleteProduct(_, args) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const deletedProduct = yield index_1.Product.findOne({ where: { id: args.id } });
+                yield (deletedProduct === null || deletedProduct === void 0 ? void 0 : deletedProduct.destroy());
+                return deletedProduct;
+            });
+        }
     }
 };
 exports.resolvers = resolvers;
@@ -71,6 +81,9 @@ const typeDefs = `#graphql
     allProducts:[Product]
     products(id: ID!):[Product]
     product(id: ID!):Product
+  }
+  type Mutation {
+    deleteProduct(id:ID!): Product
   }
   type User {
     id: String

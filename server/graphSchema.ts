@@ -5,6 +5,7 @@ const resolvers = {
   Query: {
     // Our resolvers can access the fields in contextValue
     // from their third argument
+    // argument are as follows parent, args, context, { cacheControl }
     async user(_:any,args:any) {
       const user = await User.findOne({where:{id:args.id}});
       return user
@@ -37,6 +38,13 @@ const resolvers = {
       const user = await User.findOne({where:{id:parent.user_id}});
       return user
     }
+  },
+  Mutation: {
+    async deleteProduct(_:any,args:any) {
+      const deletedProduct = await Product.findOne({where:{id:args.id}})
+      await deletedProduct?.destroy()
+      return deletedProduct
+    }
   }
 };
 
@@ -47,6 +55,9 @@ const typeDefs = `#graphql
     allProducts:[Product]
     products(id: ID!):[Product]
     product(id: ID!):Product
+  }
+  type Mutation {
+    deleteProduct(id:ID!): Product
   }
   type User {
     id: String
