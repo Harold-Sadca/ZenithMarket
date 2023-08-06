@@ -1,5 +1,5 @@
-import { User, Product } from './models/index'
-import { TypeProduct, TypeUser } from './types/types';
+import { User, Product, Order } from './models/index'
+import { TypeOrder, TypeProduct, TypeUser } from './types/types';
 
 const resolvers = {
   Query: {
@@ -25,6 +25,10 @@ const resolvers = {
     async product(_:any, args:any) {
       const product = await Product.findOne({where:{id:args.id}})
       return product
+    },
+    async allOrders() {
+      const orders = await Order.findAll()
+      return orders
     }
   },
   User: {
@@ -37,6 +41,17 @@ const resolvers = {
     async user(parent:TypeProduct) {
       const user = await User.findOne({where:{id:parent.user_id}});
       return user
+    }
+  },
+  Order: {
+    async user(parent:TypeOrder) {
+      const user = await User.findOne({where:{id:parent.user_id}});
+      return user
+    },
+    async product(parent:TypeOrder) {
+      const products = await Product.findAll()
+      const order = products.filter(el => el.id == parent.products_id)
+      return order[0]
     }
   },
   Mutation: {
@@ -55,6 +70,7 @@ const typeDefs = `#graphql
     allProducts:[Product]
     products(id: ID!):[Product]
     product(id: ID!):Product
+    allOrders:[Order]
   }
   type Mutation {
     deleteProduct(id:ID!): Product
@@ -77,6 +93,13 @@ const typeDefs = `#graphql
     image:String
     quantityInStock:Int
     user_id:String
+    user:User
+  }
+  type Order {
+    id:String
+    date:String
+    totalAmount:Int
+    product:Product
     user:User
   }
 `;

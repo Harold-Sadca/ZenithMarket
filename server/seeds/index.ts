@@ -4,6 +4,7 @@ import { firstName, lastName, email, password, address, contactNumber } from './
 import { name, price, description, image, quantityInStock } from './productHelper';
 import { initModels } from '../models/associations';
 import { createProductModel } from '../models/methods/productMethods';
+import { createOrderModel } from '../models/methods/orderMethods';
 dotenv.config();
 
 const dbName = 'ZenithMarket';
@@ -44,8 +45,10 @@ const seedDB = async() => {
       quantityInStock: quantityInStock[40-i]
     }
     const newUser = await User.create(user)
-    await createProductModel(newUser.id,product1)
-    await createProductModel(newUser.id,product2)
+    const prod1 = await createProductModel(newUser.id,product1)
+    const prod2 = await createProductModel(newUser.id,product2)
+    const totalAmount = Math.floor(Math.random()*15)
+    await createOrderModel(newUser.id, prod1!.id, totalAmount)
   }
 }
 

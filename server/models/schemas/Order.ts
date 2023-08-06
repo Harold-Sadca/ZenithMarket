@@ -22,7 +22,7 @@ export class Order extends Model<
   InferCreationAttributes<Order, {omit: OrderAssociations}>
 > {
   declare id: CreationOptional<string>
-  declare date: Date | null
+  declare date: CreationOptional<Date>
   declare totalAmount: number | null
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>

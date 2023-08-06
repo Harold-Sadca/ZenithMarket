@@ -45,6 +45,12 @@ const resolvers = {
                 const product = yield index_1.Product.findOne({ where: { id: args.id } });
                 return product;
             });
+        },
+        allOrders() {
+            return __awaiter(this, void 0, void 0, function* () {
+                const orders = yield index_1.Order.findAll();
+                return orders;
+            });
         }
     },
     User: {
@@ -60,6 +66,21 @@ const resolvers = {
             return __awaiter(this, void 0, void 0, function* () {
                 const user = yield index_1.User.findOne({ where: { id: parent.user_id } });
                 return user;
+            });
+        }
+    },
+    Order: {
+        user(parent) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const user = yield index_1.User.findOne({ where: { id: parent.user_id } });
+                return user;
+            });
+        },
+        product(parent) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const products = yield index_1.Product.findAll();
+                const order = products.filter(el => el.id == parent.products_id);
+                return order[0];
             });
         }
     },
@@ -81,6 +102,7 @@ const typeDefs = `#graphql
     allProducts:[Product]
     products(id: ID!):[Product]
     product(id: ID!):Product
+    allOrders:[Order]
   }
   type Mutation {
     deleteProduct(id:ID!): Product
@@ -103,6 +125,13 @@ const typeDefs = `#graphql
     image:String
     quantityInStock:Int
     user_id:String
+    user:User
+  }
+  type Order {
+    id:String
+    date:String
+    totalAmount:Int
+    product:Product
     user:User
   }
 `;

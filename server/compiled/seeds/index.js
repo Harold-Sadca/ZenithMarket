@@ -18,6 +18,7 @@ const userHelper_1 = require("./userHelper");
 const productHelper_1 = require("./productHelper");
 const associations_1 = require("../models/associations");
 const productMethods_1 = require("../models/methods/productMethods");
+const orderMethods_1 = require("../models/methods/orderMethods");
 dotenv_1.default.config();
 const dbName = 'ZenithMarket';
 const db = new sequelize_1.Sequelize(dbName, `${process.env.MYSQL_USERNAME}`, `${process.env.MYSQL_PASSWORD}`, {
@@ -50,8 +51,10 @@ const seedDB = () => __awaiter(void 0, void 0, void 0, function* () {
             quantityInStock: productHelper_1.quantityInStock[40 - i]
         };
         const newUser = yield User.create(user);
-        yield (0, productMethods_1.createProductModel)(newUser.id, product1);
-        yield (0, productMethods_1.createProductModel)(newUser.id, product2);
+        const prod1 = yield (0, productMethods_1.createProductModel)(newUser.id, product1);
+        const prod2 = yield (0, productMethods_1.createProductModel)(newUser.id, product2);
+        const totalAmount = Math.floor(Math.random() * 15);
+        yield (0, orderMethods_1.createOrderModel)(newUser.id, prod1.id, totalAmount);
     }
 });
 (function authenticate() {
