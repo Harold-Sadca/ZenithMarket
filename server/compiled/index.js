@@ -40,5 +40,5 @@ const port = process.env.PORT;
         context: ({ req }) => __awaiter(void 0, void 0, void 0, function* () { return ({ token: req.headers.token }); }),
     }));
     yield new Promise((resolve) => httpServer.listen({ port }, resolve));
-    console.log(`🚀 Server ready at http://localhost:4000/graphql`);
+    console.log(`🚀 Server ready at http://localhost:${port}/graphql`);
 }))();
