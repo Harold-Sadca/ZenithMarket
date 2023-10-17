@@ -28,14 +28,14 @@ To get started with this project, follow these steps:
 
 3. **Set Up the Database**: Configure your MySQL database and update the database connection settings in the backend (if necessary).
    ```bash
-   cd backend
+   cd server
    npm run seeds
    ```
    To populate the database with mock data
 4. **Start the Application**: Start the backend server.
 
    ```bash
-   cd backend
+   cd server
    npm run dev
    ```
 
